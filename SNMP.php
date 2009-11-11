@@ -77,7 +77,7 @@ class SNMP {
 							. $pSnmp['varBindsHeader'] 
 							. $pSnmp['varBinds'];
         
-        $pSnmp['bodyLen'] = pack('H*', self::hexlen($trap['body'],1));
+        $pSnmp['bodyLen'] = pack('H*', self::hexlen($pSnmp['body'],1));
         
         $snmpPack 	  = $pSnmp['version'] 
 					  . $pSnmp['community'] 
@@ -88,7 +88,7 @@ class SNMP {
         $snmpPacket   = pack('H*', '30' . self::hexlen($snmpPack,1)) 
 					  . $snmpPack;
 					
-        return $trapPacket;
+        return $snmpPacket;
     }
     
     protected static function packVarBinds($varBinds=null) 
