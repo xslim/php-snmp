@@ -225,3 +225,5 @@ function dec2hex($n)
   if (strlen($n) & 1 == 1) $n = '0'.$n;
   return $n;
 }
+
+?>
