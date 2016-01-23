@@ -21,18 +21,19 @@
 class SNMP {
 
     /**
-     * Urban:
+     * Urban: Edit this after the class definition to add support for more 
+     * notification OIDs
      */
      static $NOTIF_CLASS;
   
     /**
-    * Main function to send SNMP v2c traps
-    *
-    * @param  string $ip         IP address of trap demon.
-    * @param  array  $varBinds   variable bindings.
-    * @param  string $community  OPTIONAL Name of community to send traps to.
-    * @return bool
-    */
+     * Main function to send SNMP v2c traps
+     *
+     * @param  string $ip         IP address of trap demon.
+     * @param  array  $varBinds   variable bindings.
+     * @param  string $community  OPTIONAL Name of community to send traps to.
+     * @return bool
+     */
     public static function trap($ip, $varBinds=null, $community='public', $trapOid="default", $port=162)
     {   
         global $debug;
@@ -46,9 +47,9 @@ class SNMP {
         return true;
     }
 
-    /*
-    $varBinds = array('oid', 'value', opt 'type') // OID including count
-    */
+    /**
+     * $varBinds = array('oid', 'value', opt 'type') // OID including count
+     */
     protected static function prepareTrapPacket($varBinds=null, $community='public', $trapOid="default", $requestId=null) 
     {     
         $pSnmp['version']    = self::packVar(1); //pack('H*', '0201'.'01'); // version SNMP v2c
@@ -106,13 +107,13 @@ class SNMP {
         return implode('', $varPack);
     }
 
-    /*
-    $varBind = array('oid' , 'value')
-    Description:
-    beta oid packer
-    oid count pass inside oid
-    varBind = bindType + bindSize + oidType + oidSize + oid + valType + valSize + val
-    */
+    /**
+     * $varBind = array('oid' , 'value')
+     * Description:
+     * beta oid packer
+     * oid count pass inside oid
+     * varBind = bindType + bindSize + oidType + oidSize + oid + valType + valSize + val
+     */
     protected static function packVarBind($varBind) 
     {
         $varHead = self::packVar($varBind['oid'], 'oid');
@@ -126,49 +127,52 @@ class SNMP {
     protected static function packVar($var, $type=null, $varInHex=false) 
     {  
         /**
-        * @link http://en.wikipedia.org/wiki/Basic_encoding_rules
-        P/C is the primitive/constructed bit, it specifies if the value is primitive like an INTEGER or constructed which means, it again holds TLV values like a SET. If the bit is "on" (value = 1), it indicates a constructed value.
-
-        Name                                            P/C     dec     hex
-        EOC (End-of-Content)            P               0       0x00
-        BOOLEAN                                         P               1       0x01
-        INTEGER                                         P               2       0x02
-        BIT STRING                                      P/C     3       0x03
-        OCTET STRING                            P/C     4       0x04
-        NULL                                            P               5       0x05
-        OBJECT IDENTIFIER                       P               6       0x06
-        Object Descriptor                       P               7       0x07
-        EXTERNAL                                        C               8       0x08
-        REAL (float)                            P               9       0x09
-        ENUMERATED                                      P               10      0x0A
-        EMBEDDED PDV                            C               11      0x0B
-        UTF8String                                      P/C     12      0x0C
-        RELATIVE-OID                            P               13      0x0D
-        SEQUENCE and SEQUENCE OF        C               16      0x10
-        SET and SET OF                          C               17      0x11
-        NumericString                           P/C     18      0x12
-        PrintableString                         P/C     19      0x13
-        T61String                                       P/C     20      0x14
-        VideotexString                          P/C     21      0x15
-        IA5String                                       P/C     22      0x16
-        UTCTime                                         P/C     23      0x17
-        GeneralizedTime                         P/C     24      0x18
-        GraphicString                           P/C     25      0x19
-        VisibleString                           P/C     26      0x1A
-        GeneralString                           P/C     27      0x1B
-        UniversalString                         P/C     28      0x1C
-        CHARACTER STRING                        P/C     29      0x1D
-        BMPString                                       P/C     30      0x1E
-
-        IpAddress                                               40
-        Counter (Counter32 in SNMPv2)   41
-        Gauge (Gauge32 in SNMPv 2)              42
-        TimeTicks                                               43
-        Opaque                                                  44
-        NsapAddress                                             45
-        Counter64 (available only in SNMPv2)    46
-        Uinteger32 (available only in SNMPv2)   47
-        */
+         * @link http://en.wikipedia.org/wiki/Basic_encoding_rules
+         * P/C is the primitive/constructed bit, it specifies if the value is 
+         * primitive like an INTEGER or constructed which means, it  * again 
+         * holds TLV values like a SET. If the bit is "on" (value = 1), it 
+         * indicates a constructed value.
+         *
+         * Name                            P/C             dec     hex
+         * EOC (End-of-Content)            P               0       0x00
+         * BOOLEAN                         P               1       0x01
+         * INTEGER                         P               2       0x02
+         * BIT STRING                      P/C     3       0x03
+         * OCTET STRING                    P/C     4       0x04
+         * NULL                            P               5       0x05
+         * OBJECT IDENTIFIER               P               6       0x06
+         * Object Descriptor               P               7       0x07
+         * EXTERNAL                        C               8       0x08
+         * REAL (float)                    P               9       0x09
+         * ENUMERATED                      P               10      0x0A
+         * EMBEDDED PDV                    C               11      0x0B
+         * UTF8String                      P/C     12      0x0C
+         * RELATIVE-OID                    P               13      0x0D
+         * SEQUENCE and SEQUENCE OF        C               16      0x10
+         * SET and SET OF                  C               17      0x11
+         * NumericString                   P/C     18      0x12
+         * PrintableString                 P/C     19      0x13
+         * T61String                       P/C     20      0x14
+         * VideotexString                  P/C     21      0x15
+         * IA5String                       P/C     22      0x16
+         * UTCTime                         P/C     23      0x17
+         * GeneralizedTime                 P/C     24      0x18
+         * GraphicString                   P/C     25      0x19
+         * VisibleString                   P/C     26      0x1A
+         * GeneralString                   P/C     27      0x1B
+         * UniversalString                 P/C     28      0x1C
+         * CHARACTER STRING                P/C     29      0x1D
+         * BMPString                       P/C     30      0x1E
+         * 
+         * IpAddress                               40
+         * Counter (Counter32 in SNMPv2)           41
+         * Gauge (Gauge32 in SNMPv 2)              42
+         * TimeTicks                               43
+         * Opaque                                  44
+         * NsapAddress                             45
+         * Counter64 (available only in SNMPv2)    46
+         * Uinteger32 (available only in SNMPv2)   47
+         */
         $type2hex   = array( 's'=>'04', 'i'=>'02', 'oid'=>'06', 'o'=>'43');
 
         if ($type[0] == 'x') {
@@ -250,8 +254,4 @@ function dec2hex($n)
     return $n;
 }
 
-
 ?>
-
--- 
-People say that if you play Microsoft CD's backwards, you hear satanic things, but that's nothing, because if you play them forwards, they install Windows...
