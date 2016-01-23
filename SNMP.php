@@ -22,7 +22,7 @@ class SNMP {
 
     /**
      * Urban: Edit this after the class definition to add support for more 
-     * notification OIDs
+     * notification OIDs. default="1.3.6.1.4.1.16924.23628.999.0.1"
      */
      static $NOTIF_CLASS;
   
@@ -32,6 +32,9 @@ class SNMP {
      * @param  string $ip         IP address of trap demon.
      * @param  array  $varBinds   variable bindings.
      * @param  string $community  OPTIONAL Name of community to send traps to.
+     * @param  string $trapOid    OPTIONAL Notification class defined in $NOTIF_CLASS
+     * @param  int    $port       OPTIONAL SNMP port
+     * 
      * @return bool
      */
     public static function trap($ip, $varBinds=null, $community='public', $trapOid="default", $port=162)
@@ -226,6 +229,13 @@ function str2hex($s)
     return $hex;
 }
 
+/**
+ * Code from: phpseclib/File/ASN1.php
+ * 
+ * Online: https://github.com/phpseclib/phpseclib/blob/master/phpseclib/File/ASN1.php
+ * 
+ * Portion: function _encode_der, case self::TYPE_OBJECT_IDENTIFIER
+ */
 function oid2hex($oid) {
     $value = '';
     $parts = explode('.', $oid);
