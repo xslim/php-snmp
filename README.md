@@ -24,5 +24,12 @@ $vars[] = array(
     ); 
 
 SNMP::trap($host, $vars, $community);
+
+
+// ... OR ...
+$trapOID="default";
+$port=16222;
+
+SNMP::trap($host, $vars, $community, $trapOID, $port);
 ?>
 ```

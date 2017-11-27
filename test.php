@@ -14,27 +14,31 @@ function getNumericStringIndex($string_idx) {
      return $ret;
 }
 
-	function oid2hex($n) 
-	{
-		if (is_int($n)) {
-			$oidHex = ($n>127) ? dec2hex(128|$n/128) . dec2hex($n%128) : dec2hex($n);
-		} else {
-			$oidHex = '';
-			$oid = explode('.', $n);
-			$n1 = (40 * $oid[0]) + $oid[1];
-			$oidHex .= dec2hex($n1);
-			unset($oid[0], $oid[1]);
-			foreach ($oid as $n) $oidHex .= oid2hex( (int)$n );
-		}
-        return $oidHex;
+/**
+ * Urban: This is the old function which fails for large numbers in the OID
+ * Use SNMP::oid2hex instead which is "borrowed" :) from phpseclib (full credit)
+ */
+function oid2hex($n) 
+{
+    if (is_int($n)) {
+        $oidHex = ($n>127) ? dec2hex(128|$n/128) . dec2hex($n%128) : dec2hex($n);
+    } else {
+        $oidHex = '';
+        $oid = explode('.', $n);
+        $n1 = (40 * $oid[0]) + $oid[1];
+        $oidHex .= dec2hex($n1);
+        unset($oid[0], $oid[1]);
+        foreach ($oid as $n) $oidHex .= oid2hex( (int)$n );
     }
+    return $oidHex;
+}
 	
-	function dec2hex($n) 
-	{
-        $n = dechex($n);
-        if (strlen($n) & 1 == 1) $n = '0'.$n;
-        return $n;
-    }
+function dec2hex($n) 
+{
+    $n = dechex($n);
+    if (strlen($n) & 1 == 1) $n = '0'.$n;
+    return $n;
+}
 
 /*
 	
